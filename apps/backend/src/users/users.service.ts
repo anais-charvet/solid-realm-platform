@@ -26,4 +26,9 @@ export class UsersService {
     });
     return this.usersRepository.save(user);
   }
+
+  async delete(id: string): Promise<void> {
+    await this.usersRepository.delete(id);
 }
+}
+
