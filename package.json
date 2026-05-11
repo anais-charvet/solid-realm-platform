@@ -20,5 +20,11 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "axios": "^1.15.2",
+    "react-hook-form": "^7.74.0",
+    "zod": "^4.4.1"
+  }
 }
