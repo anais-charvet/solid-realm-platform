@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginSchema, type LoginFormData } from '@/lib/schemas/auth.schemas';
+import { registerSchema, type RegisterFormData } from '@/lib/schemas/auth.schemas';
 import { authService } from '@/lib/services/auth.service';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -16,23 +16,24 @@ export default function LoginPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     try {
       setLoading(true);
       setError('');
 
-      const response = await authService.login(data);
-      
-      localStorage.setItem('access_token', response.access_token);
-      
-      router.push('/dashboard');
+      const { passwordConfirm, ...registerData } = data;
 
+      const response = await authService.register(registerData);
+
+      localStorage.setItem('access_token', response.access_token);
+
+      router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Register failed');
     } finally {
       setLoading(false);
     }
@@ -42,12 +43,8 @@ export default function LoginPage() {
     <main className="page-container">
       <div className="card-container">
         <div className="text-center">
-          <h1 className="heading-primary">
-            Sign in to your account
-          </h1>
-          <p className="text-subtitle">
-            Welcome back to Solid Realm
-          </p>
+          <h1 className="heading-primary">Create your account</h1>
+          <p className="text-subtitle">Join Solid Realm Platform</p>
         </div>
 
         <form className="form-spacing" onSubmit={handleSubmit(onSubmit)}>
@@ -91,20 +88,50 @@ export default function LoginPage() {
                 <p className="error-message">{errors.password.message}</p>
               )}
             </div>
+
+            <div>
+              <label className="label-base" htmlFor="passwordConfirm">
+                Confirm password
+              </label>
+              <input
+                autoComplete="off"
+                className="input-base"
+                id="passwordConfirm"
+                placeholder="••••••••"
+                type="password"
+                {...register('passwordConfirm')}
+              />
+              {errors.passwordConfirm && (
+                <p className="error-message">{errors.passwordConfirm.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="label-base" htmlFor="name">
+                Name (optional)
+              </label>
+              <input
+                autoComplete="off"
+                className="input-base"
+                id="name"
+                placeholder="Your name"
+                type="text"
+                {...register('name')}
+              />
+              {errors.name && (
+                <p className="error-message">{errors.name.message}</p>
+              )}
+            </div>
           </div>
 
-          <button
-            className="btn-primary"
-            disabled={loading}
-            type="submit"
-          >
-            {loading ? 'Signing in...' : 'Sign in'}
+          <button className="btn-primary" disabled={loading} type="submit">
+            {loading ? 'Signing up...' : 'Sign up'}
           </button>
 
           <p className="text-muted">
-            Don't have an account?{' '}
-            <a className="link-primary" href="/register">
-              Sign up
+            Already have an account?{' '}
+            <a className="link-primary" href="/login">
+              Sign in
             </a>
           </p>
         </form>

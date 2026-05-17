@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_ENDPOINTS } from '../constants/api.constants';
-import type { LoginFormData, RegisterFormData } from '../schemas/auth.schemas';
+import type { LoginFormData, RegisterDTO } from '../schemas/auth.schemas';
 
 interface AuthResponse {
   access_token: string;
@@ -20,7 +20,7 @@ export const authService = {
     return response.data;
   },
 
-  async register(data: RegisterFormData): Promise<AuthResponse> {
+  async register(data: RegisterDTO): Promise<AuthResponse> {
     const response = await axios.post<AuthResponse>(
       API_ENDPOINTS.AUTH.REGISTER,
       data
