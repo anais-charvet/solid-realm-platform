@@ -16,30 +16,28 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-  const verifyToken = async () => {
-    try {
-      const token = localStorage.getItem('access_token');
-      
-      if (!token) {
+    const verifyToken = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+
+        if (!token) {
+          router.push('/login');
+          return;
+        }
+
+        const userData = await authService.getMe();
+        setUser(userData);
+      } catch {
         router.push('/login');
-        return;
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const userData = await authService.getMe(token);
-      setUser(userData);
+    verifyToken();
+  }, [router]);
 
-    } catch (error) {
-      localStorage.removeItem('access_token');
-      router.push('/login');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  verifyToken();
-}, [router]);
-
-if (loading) {
+  if (loading) {
     return (
       <main className="page-container">
         <div className="text-center">
@@ -86,7 +84,7 @@ if (loading) {
             </div>
           </div>
 
-         <button className="btn-primary" onClick={handleLogout}>
+          <button className="btn-primary" onClick={handleLogout}>
             Logout
           </button>
         </div>

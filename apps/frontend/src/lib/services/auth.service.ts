@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { API_ENDPOINTS } from '../constants/api.constants';
-import type { LoginFormData, RegisterDTO } from '../schemas/auth.schemas';
+import instance from '@/lib/utils/axiosInstance';
+import { API_ENDPOINTS } from '@/lib/constants/api.constants';
+import type { LoginFormData, RegisterDTO } from '@/lib/schemas/auth.schemas';
 
 interface AuthResponse {
   access_token: string;
@@ -13,29 +13,24 @@ interface AuthResponse {
 
 export const authService = {
   async login(data: LoginFormData): Promise<AuthResponse> {
-    const response = await axios.post<AuthResponse>(
+    const response = await instance.post<AuthResponse>(
       API_ENDPOINTS.AUTH.LOGIN,
-      data
+      data,
     );
     return response.data;
   },
 
   async register(data: RegisterDTO): Promise<AuthResponse> {
-    const response = await axios.post<AuthResponse>(
+    const response = await instance.post<AuthResponse>(
       API_ENDPOINTS.AUTH.REGISTER,
-      data
+      data,
     );
     return response.data;
   },
 
-  async getMe(token: string): Promise<AuthResponse['user']> {
-    const response = await axios.get<AuthResponse['user']>(
+  async getMe(): Promise<AuthResponse['user']> {
+    const response = await instance.get<AuthResponse['user']>(
       API_ENDPOINTS.AUTH.ME,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
     );
     return response.data;
   },
