@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { UsersModule } from './users/users.module';
+import { AssetsModule } from './assets/assets.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
       useFactory: (configService: ConfigService) =>
         getTypeOrmConfig(configService),
     }),
+    AssetsModule,
     UsersModule,
     AuthModule,
   ],
@@ -25,4 +27,3 @@ import { AuthModule } from './auth/auth.module';
   providers: [AppService],
 })
 export class AppModule {}
-
