@@ -1,9 +1,8 @@
-export const API_BASE_URL = 'http://localhost:3000';
-
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN: `${API_BASE_URL}/auth/login`,
-    REGISTER: `${API_BASE_URL}/auth/register`,
-    ME: `${API_BASE_URL}/auth/me`,
+    LOGIN: '/auth/login',
+    REGISTER: '/auth/register',
+    ME: '/auth/me',
   },
+  ASSETS: '/assets',
 } as const;
