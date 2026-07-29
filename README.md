@@ -44,12 +44,14 @@ npm run dev
 
 ## API
 
-| Method | Endpoint              | Auth | Description               |
-| ------ | --------------------- | ---- | ------------------------- |
-| POST   | `/auth/register`      | —    | Create an account         |
-| POST   | `/auth/login`         | —    | Get an access token       |
-| GET    | `/auth/me`            | ✓    | Current user              |
-| GET    | `/assets`             | —    | Public catalog, paginated |
-| GET    | `/assets/:id`         | —    | Single asset              |
-| POST   | `/assets`             | ✓    | Create an asset           |
-| POST   | `/assets/:id/publish` | ✓    | Publish an owned asset    |
+## API
+
+| Method | Endpoint              | Auth | Description                                   |
+| ------ | --------------------- | ---- | --------------------------------------------- |
+| POST   | `/auth/register`      | —    | Create an account                             |
+| POST   | `/auth/login`         | —    | Get an access token                           |
+| GET    | `/auth/me`            | ✓    | Current user                                  |
+| GET    | `/assets`             | —    | Public catalog, paginated, filter by `?type=` |
+| GET    | `/assets/:id`         | —    | Single asset                                  |
+| POST   | `/assets`             | ✓    | Create an asset                               |
+| POST   | `/assets/:id/publish` | ✓    | Publish an owned asset                        |

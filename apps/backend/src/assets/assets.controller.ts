@@ -35,6 +35,6 @@ export class AssetsController {
 
   @Get()
   async findAll(@Query() query: QueryAssetsDto) {
-    return this.assetsService.findAll(query.page, query.limit);
+    return this.assetsService.findAll(query.page, query.limit, query.type);
   }
 }

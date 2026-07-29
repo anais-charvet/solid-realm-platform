@@ -4,8 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Asset, AssetStatus } from './asset.entity';
+import { FindOptionsWhere, Repository } from 'typeorm';
+import { Asset, AssetStatus, AssetType } from './asset.entity';
 import { CreateAssetDto } from './dto/create-asset.dto';
 
 @Injectable()
@@ -15,13 +15,22 @@ export class AssetsService {
     private assetsRepository: Repository<Asset>,
   ) {}
 
-  async findAll(page = 1, limit = 20) {
+  async findAll(page = 1, limit = 20, type?: AssetType) {
+    const where: FindOptionsWhere<Asset> = {
+      status: AssetStatus.PUBLISHED,
+    };
+
+    if (type) {
+      where.type = type;
+    }
+
     const [items, total] = await this.assetsRepository.findAndCount({
-      where: { status: AssetStatus.PUBLISHED },
+      where,
       skip: (page - 1) * limit,
       take: limit,
       order: { createdAt: 'DESC' },
     });
+
     return { items, total, page, limit };
   }
 
