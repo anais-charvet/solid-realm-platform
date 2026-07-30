@@ -37,4 +37,19 @@ export class AssetsController {
   async findAll(@Query() query: QueryAssetsDto) {
     return this.assetsService.findAll(query.page, query.limit, query.type);
   }
+
+  @Get('mine')
+  @UseGuards(JwtAuthGuard)
+  async findMine(@Request() req, @Query() query: QueryAssetsDto) {
+    return this.assetsService.findByCreator(
+      req.user.id,
+      query.page,
+      query.limit,
+    );
+  }
+
+  @Get(':id')
+  async findById(@Param('id') id: string): Promise<Asset | null> {
+    return this.assetsService.findById(id);
+  }
 }

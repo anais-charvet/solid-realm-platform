@@ -73,4 +73,15 @@ export class AssetsService {
   async delete(id: string): Promise<void> {
     await this.assetsRepository.delete(id);
   }
+
+  async findByCreator(creatorId: string, page = 1, limit = 20) {
+    const [items, total] = await this.assetsRepository.findAndCount({
+      where: { creatorId },
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { createdAt: 'DESC' },
+    });
+
+    return { items, total, page, limit };
+  }
 }
