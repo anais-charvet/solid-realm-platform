@@ -7,12 +7,14 @@ import {
   Query,
   Request,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Asset } from './asset.entity';
 import { QueryAssetsDto } from './dto/query-assets.dto';
+import { UpdateAssetDto } from './dto/update-asset.dto';
 
 @Controller('assets')
 export class AssetsController {
@@ -51,5 +53,15 @@ export class AssetsController {
   @Get(':id')
   async findById(@Param('id') id: string): Promise<Asset | null> {
     return this.assetsService.findById(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  async update(
+    @Param('id') id: string,
+    @Body() updateAssetDto: UpdateAssetDto,
+    @Request() req,
+  ): Promise<Asset> {
+    return this.assetsService.update(id, updateAssetDto, req.user.id);
   }
 }

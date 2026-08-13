@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { Asset, AssetStatus, AssetType } from './asset.entity';
 import { CreateAssetDto } from './dto/create-asset.dto';
+import { UpdateAssetDto } from './dto/update-asset.dto';
 
 @Injectable()
 export class AssetsService {
@@ -67,6 +68,25 @@ export class AssetsService {
     asset.status = AssetStatus.PUBLISHED;
     asset.publishedAt = new Date();
 
+    return this.assetsRepository.save(asset);
+  }
+
+  async update(
+    id: string,
+    updateAssetDto: UpdateAssetDto,
+    creatorId: string,
+  ): Promise<Asset> {
+    const asset = await this.assetsRepository.findOne({ where: { id } });
+
+    if (!asset) {
+      throw new NotFoundException('Asset not found');
+    }
+
+    if (asset.creatorId !== creatorId) {
+      throw new ForbiddenException('You can only edit your own assets');
+    }
+
+    Object.assign(asset, updateAssetDto);
     return this.assetsRepository.save(asset);
   }
 
