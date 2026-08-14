@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/services/auth.service';
+import { Asset } from '@/lib/types/assets.types';
+import { assetsService } from '@/lib/services/assets.service';
 
 interface User {
   id: string;
@@ -13,6 +15,8 @@ interface User {
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [assets, setAssets] = useState<Asset[]>([]);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +30,9 @@ export default function DashboardPage() {
         }
 
         const userData = await authService.getMe();
+        const assetsData = await assetsService.getMine();
         setUser(userData);
+        setAssets(assetsData.items);
       } catch {
         router.push('/login');
       } finally {
@@ -83,6 +89,21 @@ export default function DashboardPage() {
               <p className="text-base font-mono text-sm">{user.id}</p>
             </div>
           </div>
+
+          <ul>
+            {assets.map((asset) => (
+              <li key={asset.id}>
+                <h2>{asset.title}</h2>
+                {asset.artist && <p>{asset.artist}</p>}
+                {asset.label && <p>{asset.label}</p>}
+                {asset.genre && <p>{asset.genre.join(', ')}</p>}
+                {asset.style && <p>{asset.style.join(', ')}</p>}
+                {asset.description && <p>{asset.description}</p>}
+                <p>{asset.type}</p>
+                {asset.price !== null && <p>{asset.price} €</p>}
+              </li>
+            ))}
+          </ul>
 
           <button className="btn-primary" onClick={handleLogout}>
             Logout
