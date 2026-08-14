@@ -1,17 +1,21 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Asset } from '@/lib/types/assets.types';
+import { Asset, AssetType } from '@/lib/types/assets.types';
 import { assetsService } from '@/lib/services/assets.service';
+import AssetFilters from '@/components/AssetFilters';
 
 export default function AssetsPage() {
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [selectedType, setSelectedType] = useState<AssetType | undefined>(
+    undefined,
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getAssets = async () => {
       try {
-        const data = await assetsService.getAll();
+        const data = await assetsService.getAll(selectedType);
         setAssets(data.items);
       } catch {
         setAssets([]);
@@ -21,7 +25,7 @@ export default function AssetsPage() {
     };
 
     getAssets();
-  }, []);
+  }, [selectedType]);
 
   if (loading) {
     return <main>Loading...</main>;
@@ -29,6 +33,7 @@ export default function AssetsPage() {
 
   return (
     <main>
+      <AssetFilters selected={selectedType} onSelect={setSelectedType} />
       <ul>
         {assets.map((asset) => (
           <li key={asset.id}>

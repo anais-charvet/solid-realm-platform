@@ -1,11 +1,16 @@
 import instance from '@/lib/utils/axiosInstance';
 import { API_ENDPOINTS } from '@/lib/constants/api.constants';
-import type { Asset, PaginatedAssets } from '@/lib/types/assets.types';
+import type {
+  Asset,
+  AssetType,
+  PaginatedAssets,
+} from '@/lib/types/assets.types';
 
 export const assetsService = {
-  async getAll(): Promise<PaginatedAssets> {
+  async getAll(type?: AssetType): Promise<PaginatedAssets> {
     const response = await instance.get<PaginatedAssets>(
       API_ENDPOINTS.ASSETS.ALL,
+      { params: type ? { type } : {} },
     );
     return response.data;
   },
