@@ -4,5 +4,8 @@ export const API_ENDPOINTS = {
     REGISTER: '/auth/register',
     ME: '/auth/me',
   },
-  ASSETS: '/assets',
+  ASSETS: {
+    ALL: '/assets',
+    MINE: '/assets/mine',
+  },
 } as const;
