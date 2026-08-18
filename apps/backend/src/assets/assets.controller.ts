@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
   UseGuards,
   Query,
   Request,
@@ -63,5 +64,11 @@ export class AssetsController {
     @Request() req,
   ): Promise<Asset> {
     return this.assetsService.update(id, updateAssetDto, req.user.id);
+  }
+
+  @Delete(':id/')
+  @UseGuards(JwtAuthGuard)
+  async deleteById(@Param('id') id: string, @Request() req): Promise<void> {
+    return this.assetsService.deleteById(id, req.user.id);
   }
 }

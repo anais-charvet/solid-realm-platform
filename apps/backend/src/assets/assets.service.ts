@@ -104,4 +104,18 @@ export class AssetsService {
 
     return { items, total, page, limit };
   }
+
+  async deleteById(id: string, creatorId: string): Promise<void> {
+    const asset = await this.assetsRepository.findOne({ where: { id } });
+
+    if (!asset) {
+      throw new NotFoundException('Asset not found');
+    }
+
+    if (asset.creatorId !== creatorId) {
+      throw new ForbiddenException('You can only delete your own assets');
+    }
+
+    await this.assetsRepository.delete(id);
+  }
 }
