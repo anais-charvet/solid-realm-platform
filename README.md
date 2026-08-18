@@ -25,22 +25,29 @@ npm install
 
 Create `apps/backend/.env`:
 
+​`
 DATABASE_HOST=
 DATABASE_PORT=
 DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE_NAME=
 PORT=
-NODE_ENV=
-
+NODE_ENV=development
 JWT_SECRET=
 JWT_EXPIRES_IN=
+​`
+
+In development, `synchronize: true` is active — migrations run automatically. Run migrations manually for staging or production:
+
+​`bash
+npm run migration:run --workspace=backend
+​`
 
 Run both apps:
 
-```bash
+​`bash
 npm run dev
-```
+​`
 
 ## API
 
@@ -55,3 +62,4 @@ npm run dev
 | POST   | `/assets`             | ✓    | Create an asset                               |
 | POST   | `/assets/:id/publish` | ✓    | Publish an owned asset                        |
 | PATCH  | `/assets/:id`         | ✓    | Update an owned asset                         |
+| DELETE | `/assets/:id`         | ✓    | Delete an owned asset                         |

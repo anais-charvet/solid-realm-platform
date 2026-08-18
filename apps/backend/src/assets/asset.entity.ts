@@ -79,4 +79,10 @@ export class Asset {
 
   @Column({ type: 'timestamp', nullable: true })
   publishedAt: Date | null;
+
+  @Column({ type: 'text', nullable: true })
+  fileUrl: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  fileKey: string | null;
 }
