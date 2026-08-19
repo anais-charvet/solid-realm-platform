@@ -9,6 +9,7 @@ import {
   Request,
   Param,
   Patch,
+  ContextType,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
@@ -16,10 +17,14 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Asset } from './asset.entity';
 import { QueryAssetsDto } from './dto/query-assets.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
+import { StorageService } from 'src/storage/storage.service';
 
 @Controller('assets')
 export class AssetsController {
-  constructor(private assetsService: AssetsService) {}
+  constructor(
+    private assetsService: AssetsService,
+    private storageService: StorageService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -66,9 +71,22 @@ export class AssetsController {
     return this.assetsService.update(id, updateAssetDto, req.user.id);
   }
 
-  @Delete(':id/')
+  @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async deleteById(@Param('id') id: string, @Request() req): Promise<void> {
     return this.assetsService.deleteById(id, req.user.id);
+  }
+
+  @Post('upload-url')
+  @UseGuards(JwtAuthGuard)
+  async presignedUrl(
+    @Body('contentType') contentType: string,
+  ): Promise<{ uploadUrl: string; fileKey: string }> {
+    const fileKey = crypto.randomUUID();
+    const uploadUrl = await this.storageService.getPresignedUploadUrl(
+      fileKey,
+      contentType,
+    );
+    return { uploadUrl, fileKey };
   }
 }
