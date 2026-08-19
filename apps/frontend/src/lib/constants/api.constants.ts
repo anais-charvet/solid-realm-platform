@@ -7,5 +7,6 @@ export const API_ENDPOINTS = {
   ASSETS: {
     ALL: '/assets',
     MINE: '/assets/mine',
+    UPLOAD: '/assets/upload-url',
   },
 } as const;

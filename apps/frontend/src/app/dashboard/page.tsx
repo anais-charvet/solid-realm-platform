@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/services/auth.service';
 import { Asset } from '@/lib/types/assets.types';
 import { assetsService } from '@/lib/services/assets.service';
+import AssetUploadForm from '@/components/AssetUploadForm';
 
 interface User {
   id: string;
@@ -89,6 +90,8 @@ export default function DashboardPage() {
               <p className="text-base font-mono text-sm">{user.id}</p>
             </div>
           </div>
+
+          <AssetUploadForm />
 
           <ul>
             {assets.map((asset) => (

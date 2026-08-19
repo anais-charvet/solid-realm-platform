@@ -24,3 +24,15 @@ export interface PaginatedAssets {
   page: number;
   limit: number;
 }
+
+export interface CreateAssetPayload {
+  title: string;
+  type: AssetType;
+  fileKey: string;
+  artist?: string;
+  description?: string;
+  genre?: string[];
+  style?: string[];
+  label?: string;
+  price?: number;
+}
