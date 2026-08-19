@@ -41,4 +41,8 @@ export class CreateAssetDto {
 
   @IsEnum(AssetType)
   type?: AssetType;
+
+  @IsString()
+  @IsOptional()
+  fileKey?: string;
 }

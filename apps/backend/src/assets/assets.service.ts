@@ -8,12 +8,14 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 import { Asset, AssetStatus, AssetType } from './asset.entity';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AssetsService {
   constructor(
     @InjectRepository(Asset)
     private assetsRepository: Repository<Asset>,
+    private configService: ConfigService,
   ) {}
 
   async findAll(page = 1, limit = 20, type?: AssetType) {
@@ -47,9 +49,14 @@ export class AssetsService {
     createAssetDto: CreateAssetDto,
     creatorId: string,
   ): Promise<Asset> {
+    const fileUrl = createAssetDto.fileKey
+      ? `${this.configService.get('R2_PUBLIC_URL')}/${createAssetDto.fileKey}`
+      : null;
+    `${this.configService.get('R2_PUBLIC_URL')}/${createAssetDto.fileKey}`;
     const asset = this.assetsRepository.create({
       ...createAssetDto,
       creatorId,
+      fileUrl,
     });
     return this.assetsRepository.save(asset);
   }
@@ -88,10 +95,6 @@ export class AssetsService {
 
     Object.assign(asset, updateAssetDto);
     return this.assetsRepository.save(asset);
-  }
-
-  async delete(id: string): Promise<void> {
-    await this.assetsRepository.delete(id);
   }
 
   async findByCreator(creatorId: string, page = 1, limit = 20) {
