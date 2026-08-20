@@ -39,6 +39,13 @@ export default function AssetDetailPage({
     <main>
       <h1>{asset.title}</h1>
       <p>{asset.type}</p>
+      {asset.fileUrl &&
+        (asset.type === 'AUDIO' ? (
+          <audio src={asset.fileUrl} controls></audio>
+        ) : (
+          <video src={asset.fileUrl} controls></video>
+        ))}
+
       {asset.price !== null && <p>{asset.price} €</p>}
     </main>
   );

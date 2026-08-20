@@ -16,6 +16,8 @@ export interface Asset {
   technicalSpecs: Record<string, unknown> | null;
   title: string | null;
   type: AssetType;
+  fileUrl: string | null;
+  fileKey: string | null;
 }
 
 export interface PaginatedAssets {

@@ -6,6 +6,7 @@ import { authService } from '@/lib/services/auth.service';
 import { Asset } from '@/lib/types/assets.types';
 import { assetsService } from '@/lib/services/assets.service';
 import AssetUploadForm from '@/components/AssetUploadForm';
+import Link from 'next/link';
 
 interface User {
   id: string;
@@ -96,14 +97,17 @@ export default function DashboardPage() {
           <ul>
             {assets.map((asset) => (
               <li key={asset.id}>
-                <h2>{asset.title}</h2>
-                {asset.artist && <p>{asset.artist}</p>}
-                {asset.label && <p>{asset.label}</p>}
-                {asset.genre && <p>{asset.genre.join(', ')}</p>}
-                {asset.style && <p>{asset.style.join(', ')}</p>}
-                {asset.description && <p>{asset.description}</p>}
-                <p>{asset.type}</p>
-                {asset.price !== null && <p>{asset.price} €</p>}
+                <Link href={`/assets/${asset.id}`}>
+                  <h2>{asset.title}</h2>
+                  {asset.artist && <p>{asset.artist}</p>}
+                  {asset.label && <p>{asset.label}</p>}
+                  {asset.genre && <p>{asset.genre.join(', ')}</p>}
+
+                  {asset.style && <p>{asset.style.join(', ')}</p>}
+                  {asset.description && <p>{asset.description}</p>}
+                  <p>{asset.type}</p>
+                  {asset.price !== null && <p>{asset.price} €</p>}
+                </Link>
               </li>
             ))}
           </ul>
