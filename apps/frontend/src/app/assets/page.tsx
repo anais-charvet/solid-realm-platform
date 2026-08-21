@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Asset, AssetType } from '@/lib/types/assets.types';
 import { assetsService } from '@/lib/services/assets.service';
 import AssetFilters from '@/components/AssetFilters';
+import AssetGrid from '@/components/AssetGrid';
 
 export default function AssetsPage() {
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -28,26 +29,22 @@ export default function AssetsPage() {
   }, [selectedType]);
 
   if (loading) {
-    return <main>Loading...</main>;
+    return (
+      <main className="page-container">
+        <p className="text-subtitle">Loading...</p>
+      </main>
+    );
   }
 
   return (
-    <main>
-      <AssetFilters selected={selectedType} onSelect={setSelectedType} />
-      <ul>
-        {assets.map((asset) => (
-          <li key={asset.id}>
-            <h2>{asset.title}</h2>
-            {asset.artist && <p>{asset.artist}</p>}
-            {asset.label && <p>{asset.label}</p>}
-            {asset.genre && <p>{asset.genre.join(', ')}</p>}
-            {asset.style && <p>{asset.style.join(', ')}</p>}
-            {asset.description && <p>{asset.description}</p>}
-            <p>{asset.type}</p>
-            {asset.price !== null && <p>{asset.price} €</p>}
-          </li>
-        ))}
-      </ul>
+    <main className="page-container">
+      <h1 className="heading-primary">Catalog</h1>
+      <div className="mt-8">
+        <AssetFilters selected={selectedType} onSelect={setSelectedType} />
+      </div>
+      <div className="mt-8">
+        <AssetGrid assets={assets} />
+      </div>
     </main>
   );
 }
