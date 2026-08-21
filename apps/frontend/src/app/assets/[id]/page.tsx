@@ -34,19 +34,33 @@ export default function AssetDetailPage({
   if (error || !asset) {
     return <main>{error || 'Asset not found'}</main>;
   }
-
   return (
-    <main>
-      <h1>{asset.title}</h1>
-      <p>{asset.type}</p>
-      {asset.fileUrl &&
-        (asset.type === 'AUDIO' ? (
-          <audio src={asset.fileUrl} controls></audio>
-        ) : (
-          <video src={asset.fileUrl} controls></video>
-        ))}
+    <main className="page-container">
+      <div className="mx-auto max-w-4xl space-y-6">
+        <h1 className="heading-primary">{asset.title}</h1>
+        <p className="label-base">{asset.type}</p>
+        {asset.fileUrl && (
+          <div className="relative flex aspect-video w-full items-end justify-center bg-black">
+            {asset.type === 'AUDIO' ? (
+              <audio
+                src={asset.fileUrl}
+                controls
+                className="w-full px-6 pb-6"
+              />
+            ) : (
+              <video
+                src={asset.fileUrl}
+                controls
+                className="h-full w-full object-contain"
+              />
+            )}
+          </div>
+        )}
 
-      {asset.price !== null && <p>{asset.price} €</p>}
+        {asset.price !== null && (
+          <p className="text-subtitle">{asset.price} €</p>
+        )}
+      </div>
     </main>
   );
 }
