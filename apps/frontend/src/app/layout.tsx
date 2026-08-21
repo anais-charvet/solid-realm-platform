@@ -12,6 +12,11 @@ const geistMono = localFont({
   variable: '--font-geist-mono',
   weight: '100 900',
 });
+const aujournuit = localFont({
+  src: './fonts/Aujournuit-VariableVF.woff2',
+  variable: '--font-aujournuit',
+  weight: '100 900',
+});
 
 export const metadata: Metadata = {
   title: 'Solid Realm',
@@ -25,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${aujournuit.variable} antialiased`}
       >
         {children}
       </body>

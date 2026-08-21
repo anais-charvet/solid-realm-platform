@@ -3,15 +3,47 @@
 @tailwind utilities;
 
 /* ==========================================================================
+   DESIGN TOKENS
+   ========================================================================== */
+:root {
+  --color-bg: #060d24;
+  --color-surface: #0c1533;
+  --color-text: #f2f0eb;
+  --color-text-muted: #6f77a0;
+  --color-accent: #f2f0eb;
+  --color-border: #1a2450;
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+@layer base {
+  body {
+    background: radial-gradient(
+      ellipse 120% 80% at 50% 0%,
+      #101d47 0%,
+      #060d24 55%,
+      #04091a 100%
+    );
+    background-attachment: fixed;
+    color: var(--color-text);
+    min-height: 100vh;
+    --font-serif: var(--font-aujournuit), Georgia, serif;
+    --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+    font-family: var(--font-sans);
+  }
+}
+
+/* ==========================================================================
    LAYOUT
    ========================================================================== */
 @layer components {
   .page-container {
-    @apply flex min-h-screen items-center justify-center bg-gray-50;
+    @apply min-h-screen px-6 py-12;
   }
 
   .card-container {
-    @apply w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg;
+    @apply mx-auto w-full max-w-md space-y-8;
   }
 }
 
@@ -20,15 +52,25 @@
    ========================================================================== */
 @layer components {
   .heading-primary {
-    @apply text-3xl font-bold text-gray-900;
+    font-family: var(--font-serif);
+    @apply text-4xl font-normal uppercase tracking-tight;
+    color: var(--color-text);
+  }
+
+  .heading-display {
+    font-family: var(--font-serif);
+    @apply text-6xl font-normal uppercase leading-none tracking-tight;
+    color: var(--color-text);
   }
 
   .text-subtitle {
-    @apply mt-2 text-sm text-gray-600;
+    @apply mt-2 text-sm;
+    color: var(--color-text-muted);
   }
 
   .label-base {
-    @apply block text-sm font-medium text-gray-700;
+    @apply block text-xs font-medium uppercase tracking-wide;
+    color: var(--color-text-muted);
   }
 }
 
@@ -37,16 +79,24 @@
    ========================================================================== */
 @layer components {
   .input-base {
-    @apply mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm;
-    @apply focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500;
+    @apply mt-1 block w-full border px-3 py-2;
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .input-base:focus {
+    @apply outline-none;
+    border-color: var(--color-accent);
   }
 
   .input-error {
-    @apply border-red-500 focus:border-red-500 focus:ring-red-500;
+    border-color: #a33;
   }
 
   .error-message {
-    @apply mt-1 text-sm text-red-600;
+    @apply mt-1 text-sm;
+    color: #d66;
   }
 
   .form-spacing {
@@ -63,14 +113,23 @@
    ========================================================================== */
 @layer components {
   .btn-base {
-    @apply rounded-md px-4 py-2 font-medium transition;
-    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply border px-6 py-2 text-sm font-medium uppercase tracking-wide transition-colors;
   }
 
   .btn-primary {
-    @apply btn-base w-full bg-blue-600 text-white;
-    @apply hover:bg-blue-700 focus:ring-blue-500;
-    @apply disabled:cursor-not-allowed disabled:opacity-50;
+    @apply btn-base w-full;
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .btn-primary:hover {
+    background-color: transparent;
+    color: var(--color-accent);
+  }
+
+  .btn-primary:disabled {
+    @apply cursor-not-allowed opacity-40;
   }
 }
 
@@ -79,11 +138,14 @@
    ========================================================================== */
 @layer components {
   .alert-error {
-    @apply rounded-md bg-red-50 p-4;
+    @apply border p-4;
+    border-color: #a33;
+    background-color: rgba(170, 51, 51, 0.1);
   }
 
   .alert-error-text {
-    @apply text-sm text-red-800;
+    @apply text-sm;
+    color: #d66;
   }
 }
 
@@ -92,11 +154,17 @@
    ========================================================================== */
 @layer components {
   .link-primary {
-    @apply font-medium text-blue-600 hover:text-blue-500;
+    @apply font-medium uppercase tracking-wide transition-colors;
+    color: var(--color-text);
+  }
+
+  .link-primary:hover {
+    color: var(--color-text-muted);
   }
 
   .text-muted {
-    @apply text-center text-sm text-gray-600;
+    @apply text-center text-sm;
+    color: var(--color-text-muted);
   }
 }
 
@@ -106,8 +174,8 @@
 input:-webkit-autofill,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:hover {
-  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
-  -webkit-text-fill-color: #111827 !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--color-surface) inset !important;
+  -webkit-text-fill-color: var(--color-text) !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
@@ -115,9 +183,9 @@ input:-webkit-autofill:hover {
 input[type='email'],
 input[type='password'],
 input[type='text'] {
-  color: #111827 !important;
+  color: var(--color-text) !important;
 }
 
 input::placeholder {
-  color: #9ca3af !important;
+  color: var(--color-text-muted) !important;
 }
