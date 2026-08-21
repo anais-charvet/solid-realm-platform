@@ -7,6 +7,7 @@ import { Asset } from '@/lib/types/assets.types';
 import { assetsService } from '@/lib/services/assets.service';
 import AssetUploadForm from '@/components/AssetUploadForm';
 import Link from 'next/link';
+import AssetGrid from '@/components/AssetGrid';
 
 interface User {
   id: string;
@@ -66,55 +67,28 @@ export default function DashboardPage() {
 
   return (
     <main className="page-container">
-      <div className="card-container">
-        <div className="text-center">
+      <div className="flex items-center justify-between">
+        <div>
           <h1 className="heading-primary">Dashboard</h1>
           <p className="text-subtitle">Welcome, {user.email}</p>
         </div>
-
-        <div className="form-spacing">
-          <div className="input-group">
-            <div>
-              <p className="label-base">Email</p>
-              <p className="text-base">{user.email}</p>
-            </div>
-
-            {user.name && (
-              <div>
-                <p className="label-base">Name</p>
-                <p className="text-base">{user.name}</p>
-              </div>
-            )}
-
-            <div>
-              <p className="label-base">User ID</p>
-              <p className="text-base font-mono text-sm">{user.id}</p>
-            </div>
-          </div>
-
-          <AssetUploadForm />
-
-          <ul>
-            {assets.map((asset) => (
-              <li key={asset.id}>
-                <Link href={`/assets/${asset.id}`}>
-                  <h2>{asset.title}</h2>
-                  {asset.artist && <p>{asset.artist}</p>}
-                  {asset.label && <p>{asset.label}</p>}
-                  {asset.genre && <p>{asset.genre.join(', ')}</p>}
-
-                  {asset.style && <p>{asset.style.join(', ')}</p>}
-                  {asset.description && <p>{asset.description}</p>}
-                  <p>{asset.type}</p>
-                  {asset.price !== null && <p>{asset.price} €</p>}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <button className="btn-primary" onClick={handleLogout}>
+        <div className="flex gap-3">
+          <a href="#upload" className="btn-base">
+            Upload
+          </a>
+          <button className="btn-base" onClick={handleLogout}>
             Logout
           </button>
+        </div>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="label-base">Your uploads</h2>
+        <div className="mt-4">
+          <AssetGrid assets={assets} />
+        </div>
+        <div id="upload" className="mt-16">
+          <AssetUploadForm />
         </div>
       </div>
     </main>
