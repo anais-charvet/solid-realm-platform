@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { assetsService } from '@/lib/services/assets.service';
 import type { Asset } from '@/lib/types/assets.types';
+import AssetGrid from '@/components/AssetGrid';
 
 export default function Home() {
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -24,25 +25,25 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <nav className="flex gap-4">
-        <Link href="/login">Login</Link>
-        <Link href="/register">Register</Link>
+    <main className="page-container">
+      <nav className="flex justify-end gap-6">
+        <Link href="/login" className="link-primary">
+          Login
+        </Link>
+        <Link href="/register" className="link-primary">
+          Register
+        </Link>
       </nav>
 
-      <h1>Solid Realm Platform</h1>
+      <h1 className="heading-display mt-12 text-center">Solid Realm</h1>
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {assets.map((asset) => (
-            <li key={asset.id}>
-              <Link href={`/assets/${asset.id}`}>{asset.title}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="mt-12">
+        {loading ? (
+          <p className="text-subtitle">Loading...</p>
+        ) : (
+          <AssetGrid assets={assets} />
+        )}
+      </div>
     </main>
   );
 }
