@@ -85,7 +85,7 @@ export default function DashboardPage() {
       <div className="mt-12">
         <h2 className="label-base">Your uploads</h2>
         <div className="mt-4">
-          <AssetGrid assets={assets} />
+          <AssetGrid assets={assets} emptyMessage="No uploads yet." />/
         </div>
         <div id="upload" className="mt-16">
           <AssetUploadForm />

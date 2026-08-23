@@ -9,6 +9,7 @@ import AssetGrid from '@/components/AssetGrid';
 export default function Home() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const getAssets = async () => {
@@ -16,7 +17,7 @@ export default function Home() {
         const data = await assetsService.getAll();
         setAssets(data.items);
       } catch {
-        setAssets([]);
+        setError('Unable to load. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -40,6 +41,8 @@ export default function Home() {
       <div className="mt-12">
         {loading ? (
           <p className="text-subtitle">Loading...</p>
+        ) : error ? (
+          <p className="text-subtitle">{error}</p>
         ) : (
           <AssetGrid assets={assets} />
         )}

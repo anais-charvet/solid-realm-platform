@@ -12,6 +12,7 @@ export default function AssetsPage() {
     undefined,
   );
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const getAssets = async () => {
@@ -19,7 +20,7 @@ export default function AssetsPage() {
         const data = await assetsService.getAll(selectedType);
         setAssets(data.items);
       } catch {
-        setAssets([]);
+        setError('Unable to load the catalog. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -38,12 +39,16 @@ export default function AssetsPage() {
 
   return (
     <main className="page-container">
-      <h1 className="heading-primary">Catalog</h1>
       <div className="mt-8">
         <AssetFilters selected={selectedType} onSelect={setSelectedType} />
       </div>
+
       <div className="mt-8">
-        <AssetGrid assets={assets} />
+        {error ? (
+          <p className="text-subtitle">{error}</p>
+        ) : (
+          <AssetGrid assets={assets} />
+        )}
       </div>
     </main>
   );
