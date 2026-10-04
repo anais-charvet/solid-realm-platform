@@ -41,6 +41,12 @@ export class AssetsController {
     return this.assetsService.publish(id, req.user.id);
   }
 
+  @Post(':id/unpublish')
+  @UseGuards(JwtAuthGuard)
+  async unpublish(@Param('id') id: string, @Request() req): Promise<Asset> {
+    return this.assetsService.unpublish(id, req.user.id);
+  }
+
   @Get()
   async findAll(@Query() query: QueryAssetsDto) {
     return this.assetsService.findAll(query.page, query.limit, query.type);

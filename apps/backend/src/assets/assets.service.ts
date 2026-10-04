@@ -52,7 +52,6 @@ export class AssetsService {
     const fileUrl = createAssetDto.fileKey
       ? `${this.configService.get('R2_PUBLIC_URL')}/${createAssetDto.fileKey}`
       : null;
-    `${this.configService.get('R2_PUBLIC_URL')}/${createAssetDto.fileKey}`;
     const asset = this.assetsRepository.create({
       ...createAssetDto,
       creatorId,
@@ -74,6 +73,23 @@ export class AssetsService {
 
     asset.status = AssetStatus.PUBLISHED;
     asset.publishedAt = new Date();
+
+    return this.assetsRepository.save(asset);
+  }
+
+  async unpublish(id: string, creatorId: string): Promise<Asset> {
+    const asset = await this.assetsRepository.findOne({ where: { id } });
+
+    if (!asset) {
+      throw new NotFoundException('Asset not found');
+    }
+
+    if (asset.creatorId !== creatorId) {
+      throw new ForbiddenException('You can only unpublish your own assets');
+    }
+
+    asset.status = AssetStatus.DRAFT;
+    asset.publishedAt = null;
 
     return this.assetsRepository.save(asset);
   }
