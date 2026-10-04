@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/services/auth.service';
-import { Asset } from '@/lib/types/assets.types';
 import { assetsService } from '@/lib/services/assets.service';
+import { Asset } from '@/lib/types/assets.types';
 import AssetUploadForm from '@/components/AssetUploadForm';
-import Link from 'next/link';
-import AssetGrid from '@/components/AssetGrid';
+import DashboardAssetList from '@/components/DashboardAssetList';
 
 interface User {
   id: string;
@@ -22,6 +21,11 @@ export default function DashboardPage() {
 
   const router = useRouter();
 
+  const refreshAssets = useCallback(async () => {
+    const data = await assetsService.getMine();
+    setAssets(data.items);
+  }, []);
+
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -33,9 +37,8 @@ export default function DashboardPage() {
         }
 
         const userData = await authService.getMe();
-        const assetsData = await assetsService.getMine();
         setUser(userData);
-        setAssets(assetsData.items);
+        await refreshAssets();
       } catch {
         router.push('/login');
       } finally {
@@ -44,7 +47,7 @@ export default function DashboardPage() {
     };
 
     verifyToken();
-  }, [router]);
+  }, [router, refreshAssets]);
 
   if (loading) {
     return (
@@ -64,6 +67,12 @@ export default function DashboardPage() {
     localStorage.removeItem('access_token');
     router.push('/login');
   };
+
+  const handleChange = (updated: Asset) =>
+    setAssets((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
+
+  const handleDelete = (id: string) =>
+    setAssets((prev) => prev.filter((a) => a.id !== id));
 
   return (
     <main className="page-container">
@@ -85,10 +94,15 @@ export default function DashboardPage() {
       <div className="mt-12">
         <h2 className="label-base">Your uploads</h2>
         <div className="mt-4">
-          <AssetGrid assets={assets} emptyMessage="No uploads yet." />/
+          <DashboardAssetList
+            assets={assets}
+            onChange={handleChange}
+            onDelete={handleDelete}
+            emptyMessage="No uploads yet."
+          />
         </div>
         <div id="upload" className="mt-16">
-          <AssetUploadForm />
+          <AssetUploadForm onCreated={refreshAssets} />
         </div>
       </div>
     </main>

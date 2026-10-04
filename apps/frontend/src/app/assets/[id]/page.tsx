@@ -3,6 +3,7 @@
 import { assetsService } from '@/lib/services/assets.service';
 import { useEffect, useState } from 'react';
 import type { Asset } from '@/lib/types/assets.types';
+import { useRouter } from 'next/navigation';
 
 export default function AssetDetailPage({
   params,
@@ -12,6 +13,15 @@ export default function AssetDetailPage({
   const [asset, setAsset] = useState<Asset | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  const goBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push('/assets');
+    }
+  };
 
   useEffect(() => {
     const getAssetDetail = async () => {
@@ -37,6 +47,9 @@ export default function AssetDetailPage({
   return (
     <main className="page-container">
       <div className="mx-auto max-w-4xl space-y-6">
+        <button type="button" className="link-primary" onClick={goBack}>
+          ← Back
+        </button>
         <h1 className="heading-primary">{asset.title}</h1>
         <p className="label-base">{asset.type}</p>
         {asset.fileUrl && (
