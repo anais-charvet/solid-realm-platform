@@ -15,6 +15,8 @@ interface AssetUploadFormProps {
   onCreated?: () => void | Promise<void>;
 }
 
+const ALLOWED_FILES = /\.(mp3|m4a|wav|ogg|mp4|webm)$/i;
+
 export default function AssetUploadForm({ onCreated }: AssetUploadFormProps) {
   const [file, setFile] = useState<File | null>(null);
   const [fileInputKey, setFileInputKey] = useState(0);
@@ -117,8 +119,20 @@ export default function AssetUploadForm({ onCreated }: AssetUploadFormProps) {
         <input
           key={fileInputKey}
           type="file"
-          accept="audio/*,video/*"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          accept=".mp3,.m4a,.wav,.ogg,.mp4,.webm"
+          onChange={(e) => {
+            const selected = e.target.files?.[0] || null;
+            if (selected && !ALLOWED_FILES.test(selected.name)) {
+              setError(
+                'Unsupported format. Use MP3, M4A, WAV, OGG, MP4 or WebM.',
+              );
+              setFile(null);
+              e.target.value = '';
+              return;
+            }
+            setError('');
+            setFile(selected);
+          }}
         />
 
         <button className="btn-primary" disabled={loading} type="submit">
