@@ -2,6 +2,8 @@
 
 A media marketplace for audio and video content, where creators publish and sell their work directly.
 
+**Live demo:** https://solid-realm-platform.vercel.app (sign-up is open)
+
 ## Stack
 
 - **Frontend** — Next.js, TypeScript, Tailwind CSS, axios, react-hook-form
@@ -17,6 +19,12 @@ The backend follows a layered architecture: controllers handle HTTP, services ho
 Assets store common fields as columns (type, status, price, genre) and format-specific technical specifications in a JSONB column, keeping the schema flexible across media types without sparse tables.
 
 File uploads never pass through the backend: the client requests a short-lived presigned URL, uploads the file straight to R2, then creates the asset with the returned file key.
+
+## Deployment
+
+- **Frontend** — Vercel (root directory `apps/frontend`)
+- **API + PostgreSQL** — Railway; migrations run automatically on each deploy
+- **Files** — Cloudflare R2 (public bucket, CORS restricted to the app origin)
 
 ## Getting started
 
@@ -45,10 +53,11 @@ R2_BUCKET_NAME=
 R2_PUBLIC_URL=
 ```
 
-In development, `synchronize: true` is active — migrations run automatically. Run migrations manually for staging or production:
+In development, `synchronize: true` is active, so the schema is created automatically. For staging or production, run the migrations on the compiled build:
 
 ```bash
-npm run migration:run --workspace=backend
+npm run build --workspace=backend
+npm run migration:run:prod --workspace=backend
 ```
 
 Run both apps:
@@ -59,16 +68,24 @@ npm run dev
 
 ## API
 
-| Method | Endpoint              | Auth | Description                                   |
-| ------ | --------------------- | ---- | --------------------------------------------- |
-| POST   | `/auth/register`      | —    | Create an account                             |
-| POST   | `/auth/login`         | —    | Get an access token                           |
-| GET    | `/auth/me`            | ✓    | Current user                                  |
-| GET    | `/assets`             | —    | Public catalog, paginated, filter by `?type=` |
-| GET    | `/assets/mine`        | ✓    | Current user's assets (all statuses)          |
-| GET    | `/assets/:id`         | —    | Single asset                                  |
-| POST   | `/assets`             | ✓    | Create an asset                               |
-| POST   | `/assets/upload-url`  | ✓    | Get a presigned upload URL                    |
-| POST   | `/assets/:id/publish` | ✓    | Publish an owned asset                        |
-| PATCH  | `/assets/:id`         | ✓    | Update an owned asset                         |
-| DELETE | `/assets/:id`         | ✓    | Delete an owned asset                         |
+| Method | Endpoint                | Auth | Description                                   |
+| ------ | ----------------------- | ---- | --------------------------------------------- |
+| POST   | `/auth/register`        | —    | Create an account                             |
+| POST   | `/auth/login`           | —    | Get an access token                           |
+| GET    | `/auth/me`              | ✓    | Current user                                  |
+| GET    | `/assets`               | —    | Public catalog, paginated, filter by `?type=` |
+| GET    | `/assets/mine`          | ✓    | Current user's assets (all statuses)          |
+| GET    | `/assets/:id`           | —    | Single asset                                  |
+| POST   | `/assets`               | ✓    | Create an asset                               |
+| POST   | `/assets/upload-url`    | ✓    | Get a presigned upload URL                    |
+| POST   | `/assets/:id/publish`   | ✓    | Publish an owned asset                        |
+| POST   | `/assets/:id/unpublish` | ✓    | Set an owned asset back to draft              |
+| PATCH  | `/assets/:id`           | ✓    | Update an owned asset                         |
+| DELETE | `/assets/:id`           | ✓    | Delete an owned asset                         |
+
+## Roadmap (V2)
+
+- Edit an asset after creation
+- Separate streaming file from a private lossless master, delivered after purchase
+- Purchases and artist pages
+- Editorial UI redesign
