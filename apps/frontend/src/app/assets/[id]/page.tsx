@@ -37,6 +37,10 @@ export default function AssetDetailPage({
     getAssetDetail();
   }, [params.id]);
 
+  useEffect(() => {
+    if (asset) document.title = `${asset.title} — Solid Realm`;
+  }, [asset]);
+
   if (loading) {
     return <main>Loading...</main>;
   }
