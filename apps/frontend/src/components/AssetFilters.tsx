@@ -12,7 +12,7 @@ export default function AssetFilters({
   onSelect,
 }: AssetFiltersProps) {
   return (
-    <div>
+    <div className="flex gap-6">
       <button onClick={() => onSelect(undefined)}>All</button>
       <button onClick={() => onSelect('AUDIO')}>Audio</button>
       <button onClick={() => onSelect('VIDEO')}>Video</button>

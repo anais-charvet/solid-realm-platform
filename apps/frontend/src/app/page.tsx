@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { assetsService } from '@/lib/services/assets.service';
 import type { Asset } from '@/lib/types/assets.types';
 import AssetGrid from '@/components/AssetGrid';
@@ -27,15 +26,6 @@ export default function Home() {
 
   return (
     <main className="page-container">
-      <nav className="flex justify-end gap-6">
-        <Link href="/login" className="link-primary">
-          Login
-        </Link>
-        <Link href="/register" className="link-primary">
-          Register
-        </Link>
-      </nav>
-
       <h1 className="heading-display mt-12 text-center">Solid Realm</h1>
 
       <div className="mt-12">

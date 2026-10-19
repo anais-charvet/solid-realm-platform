@@ -52,8 +52,12 @@
    ========================================================================== */
 @layer components {
   .heading-primary {
-    font-family: var(--font-serif);
-    @apply text-4xl font-normal uppercase tracking-tight;
+    @apply text-3xl font-semibold tracking-tight;
+    color: var(--color-text);
+  }
+
+  .heading-card {
+    @apply mt-3 text-lg font-medium;
     color: var(--color-text);
   }
 
